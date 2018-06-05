@@ -2,7 +2,7 @@
 
 // import {inject} from @loopback/context;
 import { repository } from "@loopback/repository";
-import { post, get, requestBody } from "@loopback/rest";
+import { post, get, requestBody, HttpErrors } from "@loopback/rest";
 import { User } from "../models/user";
 import { UserRepository } from "../repositories/users.repository";
 import { request } from "http";
@@ -11,21 +11,32 @@ export class LoginController {
   constructor(@repository(UserRepository.name) private userRepo: UserRepository) {}
 
   @post('/login')
-  async login(@requestBody() login: User){
-    var users = await this.userRepo.find();
-    var email = login.email;
-    var password = login.password;
-
-    // TODO: 
-    // loop through users
-    for (var i = 0; i < users.length; i++){
-      var user = users[i];
-      // find by email + password
-      if (user.email == users[i].email && user.password == users[i].password){
-        return users[i];
-      }
+  async login(@requestBody() user: User): Promise<User>{
+    
+    // Check for email and passwword are supplied
+    if (!user.email || !user.password) {
+      throw new HttpErrors.Unauthorized('invalid credentials');
     }
-    return console.error();
+    // Check that email and password are valid
+    let userExists: boolean = !!(await this.userRepo.count({
+      and: [
+        { email: user.email },
+        { password: user.password },
+      ],
+    }));
+
+    if (!userExists) {
+      throw new HttpErrors.Unauthorized('invalid credentials');
+    }
+
+    return await this.userRepo.findOne({
+      where: {
+        and: [
+          { email: user.email },
+          { password: user.password }
+        ],
+      },
+    });
 
   }
 

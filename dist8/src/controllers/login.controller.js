@@ -22,20 +22,29 @@ let LoginController = class LoginController {
     constructor(userRepo) {
         this.userRepo = userRepo;
     }
-    async login(login) {
-        var users = await this.userRepo.find();
-        var email = login.email;
-        var password = login.password;
-        // TODO: 
-        // loop through users
-        for (var i = 0; i < users.length; i++) {
-            var user = users[i];
-            // find by email + password
-            if (user.email == users[i].email && user.password == users[i].password) {
-                return users[i];
-            }
+    async login(user) {
+        // Check for email and passwword are supplied
+        if (!user.email || !user.password) {
+            throw new rest_1.HttpErrors.Unauthorized('invalid credentials');
         }
-        return console.error();
+        // Check that email and password are valid
+        let userExists = !!(await this.userRepo.count({
+            and: [
+                { email: user.email },
+                { password: user.password },
+            ],
+        }));
+        if (!userExists) {
+            throw new rest_1.HttpErrors.Unauthorized('invalid credentials');
+        }
+        return await this.userRepo.findOne({
+            where: {
+                and: [
+                    { email: user.email },
+                    { password: user.password }
+                ],
+            },
+        });
     }
 };
 __decorate([

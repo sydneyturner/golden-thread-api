@@ -15,40 +15,42 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 // import {inject} from @loopback/context;
 const repository_1 = require("@loopback/repository");
-const users_repository_1 = require("../repositories/users.repository");
 const rest_1 = require("@loopback/rest");
-let UsersController = class UsersController {
-    constructor(userRepo) {
-        this.userRepo = userRepo;
+const charity_1 = require("../models/charity");
+const charities_repository_1 = require("../repositories/charities.repository");
+let CharitiesController = class CharitiesController {
+    constructor(charityRepo) {
+        this.charityRepo = charityRepo;
     }
-    async getAllUsers() {
-        return await this.userRepo.find();
+    async getCharity(charity) {
+        return await this.charityRepo.find();
     }
-    async findUsersById(id) {
-        // Check valid ID
-        let userExists = !!(await this.userRepo.count({ id }));
-        if (!userExists) {
-            throw new rest_1.HttpErrors.BadRequest(`user ID ${id} does not exist`);
+    async findCharityById(id) {
+        // Check for valid ID
+        let charityExists = !!(await this.charityRepo.count({ id }));
+        if (!charityExists) {
+            throw new rest_1.HttpErrors.BadRequest(`charity ID ${id} does not exist`);
         }
-        return await this.userRepo.findById(id);
+        return await this.charityRepo.findById(id);
     }
 };
 __decorate([
-    rest_1.get('/users'),
+    rest_1.get('/charities'),
+    __param(0, rest_1.requestBody()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [charity_1.Charity]),
     __metadata("design:returntype", Promise)
-], UsersController.prototype, "getAllUsers", null);
+], CharitiesController.prototype, "getCharity", null);
 __decorate([
-    rest_1.get('/users/{id}'),
+    rest_1.get('/charities/{id}'),
     __param(0, rest_1.param.path.number('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
-], UsersController.prototype, "findUsersById", null);
-UsersController = __decorate([
-    __param(0, repository_1.repository(users_repository_1.UserRepository.name)),
-    __metadata("design:paramtypes", [users_repository_1.UserRepository])
-], UsersController);
-exports.UsersController = UsersController;
-//# sourceMappingURL=users.controller.js.map
+], CharitiesController.prototype, "findCharityById", null);
+CharitiesController = __decorate([
+    __param(0, repository_1.repository(charities_repository_1.CharitiesRepository.name)),
+    __metadata("design:paramtypes", [charities_repository_1.CharitiesRepository])
+], CharitiesController);
+exports.CharitiesController = CharitiesController;
+//# sourceMappingURL=charities.controller.js.map
