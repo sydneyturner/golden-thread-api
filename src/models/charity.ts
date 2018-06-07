@@ -6,13 +6,13 @@ export class Charity extends Entity {
         type: 'number',
         id: true
     })
-    id?: number;
+    charity_id?: number;
 
     @property({
         type: 'string',
         required: true
     })
-    charityname: string;
+    charity_name: string;
 
     @property({
         type: 'string',

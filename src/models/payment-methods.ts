@@ -1,44 +1,42 @@
 import { Entity, property, model } from '@loopback/repository';
 
 @model()
-export class User extends Entity {
+export class PaymentMethod extends Entity {
     @property({
         type: 'number',
         id: true
     })
-    user_id?: number;
+    id?: number;
+
+    @property({
+        type: 'number',
+        required: true
+    })
+    user_id: number;
 
     @property({
         type: 'string',
         required: true
     })
-    firstname: string;
+    bank: string;
 
     @property({
         type: 'string',
         required: true
     })
-    lastname: string;
+    card_number: string;
 
     @property({
         type: 'string',
         required: true
     })
-    email: string;
+    security_code: string;
 
     @property({
         type: 'string',
         required: true
     })
-    password: string;
+    exp_date: string;
 
-    // @property({
-    //     type: 'string',
-    //     // required: true
-    // })
-    // dateFrom: Date;
-
-    getId() {
-        return this.id;
-    }
+    
 }

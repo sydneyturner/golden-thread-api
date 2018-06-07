@@ -1,9 +1,10 @@
 import { Entity } from '@loopback/repository';
 export declare class User extends Entity {
-    id?: number;
+    user_id?: number;
     firstname: string;
     lastname: string;
     email: string;
     password: string;
-    getId(): number | undefined;
+    dateFrom: Date;
+    getId(): any;
 }

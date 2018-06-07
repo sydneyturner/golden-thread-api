@@ -10,7 +10,7 @@ export class CharitiesController {
   constructor(@repository(CharitiesRepository.name) private charityRepo: CharitiesRepository) {}
 
   @get('/charities')
-  async getCharity(@requestBody() charity: Charity){
+  async getCharity(): Promise<Array<Charity>>{
     return await this.charityRepo.find();
   }
 
@@ -26,6 +26,8 @@ export class CharitiesController {
     return await this.charityRepo.findById(id);
 
   }
+
+  
 
 }
 

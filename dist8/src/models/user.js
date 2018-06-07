@@ -21,7 +21,7 @@ __decorate([
         id: true
     }),
     __metadata("design:type", Number)
-], User.prototype, "id", void 0);
+], User.prototype, "user_id", void 0);
 __decorate([
     repository_1.property({
         type: 'string',
@@ -50,6 +50,12 @@ __decorate([
     }),
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
+__decorate([
+    repository_1.property({
+        type: 'string',
+    }),
+    __metadata("design:type", Date)
+], User.prototype, "dateFrom", void 0);
 User = __decorate([
     repository_1.model()
 ], User);

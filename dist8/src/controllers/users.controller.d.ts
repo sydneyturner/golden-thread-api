@@ -5,4 +5,5 @@ export declare class UsersController {
     constructor(userRepo: UserRepository);
     getAllUsers(): Promise<Array<User>>;
     findUsersById(id: number): Promise<User>;
+    getDonationsById(user_id: number, dateFrom: Date): Promise<void>;
 }

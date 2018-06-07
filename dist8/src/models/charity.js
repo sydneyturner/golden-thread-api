@@ -18,14 +18,14 @@ __decorate([
         id: true
     }),
     __metadata("design:type", Number)
-], Charity.prototype, "id", void 0);
+], Charity.prototype, "charity_id", void 0);
 __decorate([
     repository_1.property({
         type: 'string',
         required: true
     }),
     __metadata("design:type", String)
-], Charity.prototype, "charityname", void 0);
+], Charity.prototype, "charity_name", void 0);
 __decorate([
     repository_1.property({
         type: 'string',
