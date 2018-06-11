@@ -14,7 +14,7 @@ export class RegistrationController {
   async createNewUser(@requestBody() user: User){
 
     // Check required fields
-    if(!user.email || ! user.password) {
+    if(!user.email|| !user.password) {
       throw new HttpErrors.BadRequest('missing data');
     }
 

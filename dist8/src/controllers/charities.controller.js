@@ -16,13 +16,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // import {inject} from @loopback/context;
 const repository_1 = require("@loopback/repository");
 const rest_1 = require("@loopback/rest");
-const charity_1 = require("../models/charity");
 const charities_repository_1 = require("../repositories/charities.repository");
 let CharitiesController = class CharitiesController {
     constructor(charityRepo) {
         this.charityRepo = charityRepo;
     }
-    async getCharity(charity) {
+    async getCharity() {
         return await this.charityRepo.find();
     }
     async findCharityById(id) {
@@ -36,9 +35,8 @@ let CharitiesController = class CharitiesController {
 };
 __decorate([
     rest_1.get('/charities'),
-    __param(0, rest_1.requestBody()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [charity_1.Charity]),
+    __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], CharitiesController.prototype, "getCharity", null);
 __decorate([

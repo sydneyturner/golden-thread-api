@@ -18,33 +18,36 @@ const repository_1 = require("@loopback/repository");
 const rest_1 = require("@loopback/rest");
 const user_1 = require("../models/user");
 const users_repository_1 = require("../repositories/users.repository");
+// import {Login} from '../models/login';
+const jsonwebtoken_1 = require("jsonwebtoken");
 let LoginController = class LoginController {
     constructor(userRepo) {
         this.userRepo = userRepo;
     }
-    async login(user) {
-        // Check for email and passwword are supplied
-        if (!user.email || !user.password) {
-            throw new rest_1.HttpErrors.Unauthorized('invalid credentials');
+    async login(login) {
+        var users = await this.userRepo.find();
+        var email = login.email;
+        var password = login.password;
+        for (var i = 0; i < users.length; i++) {
+            var user = users[i];
+            if (user.email == email && user.password == password) {
+                var jwt = jsonwebtoken_1.sign({
+                    user: {
+                        id: user.user_id,
+                        firstname: user.firstname,
+                        email: user.email
+                    },
+                    anything: "hello",
+                }, 'shh', {
+                    issuer: 'auth.ix.co.za',
+                    audience: 'ix.co.za',
+                });
+                return {
+                    token: jwt,
+                };
+            }
         }
-        // Check that email and password are valid
-        let userExists = !!(await this.userRepo.count({
-            and: [
-                { email: user.email },
-                { password: user.password },
-            ],
-        }));
-        if (!userExists) {
-            throw new rest_1.HttpErrors.Unauthorized('invalid credentials');
-        }
-        return await this.userRepo.findOne({
-            where: {
-                and: [
-                    { email: user.email },
-                    { password: user.password }
-                ],
-            },
-        });
+        throw new rest_1.HttpErrors.NotFound('User not found, sorry!');
     }
 };
 __decorate([

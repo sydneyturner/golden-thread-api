@@ -17,12 +17,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const repository_1 = require("@loopback/repository");
 const users_repository_1 = require("../repositories/users.repository");
 const rest_1 = require("@loopback/rest");
+const jsonwebtoken_1 = require("jsonwebtoken");
 let UsersController = class UsersController {
     constructor(userRepo) {
         this.userRepo = userRepo;
     }
-    async getAllUsers() {
-        return await this.userRepo.find();
+    async getAllUsers(jwt) {
+        if (!jwt)
+            throw new rest_1.HttpErrors.Unauthorized('JWT token is required');
+        try {
+            var jwtBody = jsonwebtoken_1.verify(jwt, 'shh');
+            console.log(jwtBody);
+            return jwtBody;
+        }
+        catch (err) {
+            throw new rest_1.HttpErrors.Unauthorized('JWT token is required');
+        }
+        // return await this.userRepo.find();
     }
     async findUsersById(id) {
         // Check valid ID
@@ -39,8 +50,9 @@ let UsersController = class UsersController {
 };
 __decorate([
     rest_1.get('/users'),
+    __param(0, rest_1.param.query.string('jwt')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getAllUsers", null);
 __decorate([
